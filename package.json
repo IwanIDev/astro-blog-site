@@ -4,10 +4,11 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
+    "dev": "bun run openring:generate && astro dev",
+    "build": "bun run openring:generate && astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "openring:generate": "node scripts/generate-openring.mjs",
     "lint": "eslint .",
     "format": "prettier --write \"**/*.{ts,tsx,astro}\"",
     "typecheck": "astro check"

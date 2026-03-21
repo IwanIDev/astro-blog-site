@@ -1,0 +1,3 @@
+https://drewdevault.com/feed.xml
+https://emersion.fr/blog/rss.xml
+https://danluu.com/atom.xml
