@@ -1,0 +1,132 @@
+name: Build Docker Image
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository_owner != '' && format('{0}', github.repository) || github.repository }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Lowercase image name
+        run: echo "IMAGE_NAME=${IMAGE_NAME,,}" >> $GITHUB_ENV
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=sha
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          platforms: linux/arm64
+          provenance: false
+          build-args: |
+            VITE_DRUPAL_BASE_URL=${{ vars.VITE_DRUPAL_BASE_URL }}
+            VITE_DRUPAL_API_PREFIX=${{ vars.VITE_DRUPAL_API_PREFIX }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Lowercase image name
+        run: echo "IMAGE_NAME=${IMAGE_NAME,,}" >> $GITHUB_ENV
+
+      - name: Setup SSH key for Docker context
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_PORT: ${{ secrets.DEPLOY_PORT || 22 }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H $DEPLOY_HOST >> ~/.ssh/known_hosts
+          
+          # Create SSH config to use only the specific key and prevent trying multiple auth methods
+          cat > ~/.ssh/config << EOF
+          Host deploy-target
+            HostName $DEPLOY_HOST
+            User $DEPLOY_USER
+            Port $DEPLOY_PORT
+            IdentityFile ~/.ssh/deploy_key
+            IdentitiesOnly yes
+            PubkeyAuthentication yes
+            PasswordAuthentication no
+          EOF
+          chmod 600 ~/.ssh/config
+          
+          # Test the connection
+          ssh -o BatchMode=yes deploy-target "echo 'SSH connection successful'"
+
+      - name: Create Docker context
+        run: |
+          docker context create remote --docker "host=ssh://deploy-target"
+          docker context use remote
+          docker context ls
+
+      - name: Log in to GitHub Container Registry on remote
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker --context remote login ${{ env.REGISTRY }} -u ${{ github.actor }} --password-stdin
+
+      - name: Deploy stack to remote server
+        env:
+          IMAGE_NAME: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          STACK_NAME: vite-portfolio
+          PORTFOLIO_HOST: ${{ vars.PORTFOLIO_HOST }}
+          TRAEFIK_NETWORK: ${{ vars.TRAEFIK_NETWORK }}
+          TRAEFIK_ENTRYPOINTS: ${{ vars.TRAEFIK_ENTRYPOINTS }}
+          DRUPAL_DB_PASSWORD: ${{ secrets.DRUPAL_DB_PASSWORD }}
+          MARIADB_ROOT_PASSWORD: ${{ secrets.MARIADB_ROOT_PASSWORD }}
+        run: |
+          # Deploy the stack using the remote context
+          docker --context remote stack deploy -c docker-stack.yml --with-registry-auth $STACK_NAME
+
+          # Wait for services to be ready
+          sleep 10
+
+          # Display stack services status
+          docker --context remote stack services $STACK_NAME

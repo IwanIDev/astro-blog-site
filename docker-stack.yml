@@ -1,0 +1,20 @@
+services:
+  web:
+    image: ${IMAGE_NAME}
+    networks:
+      - traefik
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=${TRAEFIK_NETWORK}
+        - traefik.http.routers.vite-portfolio.rule=Host(`${PORTFOLIO_HOST}`)
+        - traefik.http.routers.vite-portfolio.entrypoints=${TRAEFIK_ENTRYPOINTS}
+        - traefik.http.services.vite-portfolio.loadbalancer.server.port=80
+
+networks:
+  traefik:
+    external: true
+    name: ${TRAEFIK_NETWORK}
