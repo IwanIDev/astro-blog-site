@@ -1,0 +1,42 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import Layout from "@/layouts/main.astro";
+import { buttonVariants } from "@/components/ui/button";
+import PostHeader from "@/components/PostHeader.astro";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: CollectionEntry<"blog">;
+}
+
+const { post } = Astro.props as Props;
+const { Content } = await post.render();
+---
+
+<Layout title={`${post.data.title} | Iwan Ingman's Blog`} description={post.data.description}>
+  <main class="mx-auto flex w-full max-w-3xl flex-col gap-8 p-4 md:p-6">
+    <PostHeader
+      title={post.data.title}
+      slug={post.id}
+      description={post.data.description}
+      author={post.data.author}
+      publishDate={post.data.publishDate}
+    />
+
+    <article class="space-y-4 leading-relaxed">
+      <Content />
+    </article>
+
+    <div>
+      <a class={buttonVariants({ size: "xs", variant: "outline" })} href="/">Back to posts</a>
+    </div>
+  </main>
+</Layout>

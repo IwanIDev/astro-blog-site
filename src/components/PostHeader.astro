@@ -1,0 +1,29 @@
+---
+import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+
+interface Props {
+  title: string;
+  slug: string;
+  description: string;
+  author: string;
+  publishDate: Date;
+}
+
+const { title, slug, description, author, publishDate } = Astro.props as Props;
+---
+
+<Card className="w-full">
+  <CardHeader>
+    <div class="flex flex-wrap gap-2">
+      <Badge variant="secondary">{author}</Badge>
+      <Badge variant="outline">{publishDate.toLocaleDateString()}</Badge>
+    </div>
+    <h1 class="font-heading text-xl font-medium md:text-2xl" transition:name={`post-title-${slug}`}>{title}</h1>
+    <CardDescription>{description}</CardDescription>
+  </CardHeader>
+  <CardContent>
+    <Separator />
+  </CardContent>
+</Card>

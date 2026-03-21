@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card";
 
 // Fetch all blog posts from the content collection
 const posts = await getCollection('blog');
@@ -18,7 +18,7 @@ const sortedPosts = posts.sort((a, b) =>
             <a href={`/posts/${post.id}`} class="block hover:opacity-80 transition-opacity">
                 <Card>
                     <CardHeader>
-                        <CardTitle>{post.data.title}</CardTitle>
+                        <h2 class="font-heading text-sm font-medium" transition:name={`post-title-${post.id}`}>{post.data.title}</h2>
                         <CardDescription>{post.data.description}</CardDescription>
                     </CardHeader>
                     <CardContent>
