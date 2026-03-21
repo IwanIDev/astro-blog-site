@@ -115,12 +115,10 @@ jobs:
       - name: Deploy stack to remote server
         env:
           IMAGE_NAME: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-          STACK_NAME: vite-portfolio
+          STACK_NAME: astro-blog-site
           PORTFOLIO_HOST: ${{ vars.PORTFOLIO_HOST }}
           TRAEFIK_NETWORK: ${{ vars.TRAEFIK_NETWORK }}
           TRAEFIK_ENTRYPOINTS: ${{ vars.TRAEFIK_ENTRYPOINTS }}
-          DRUPAL_DB_PASSWORD: ${{ secrets.DRUPAL_DB_PASSWORD }}
-          MARIADB_ROOT_PASSWORD: ${{ secrets.MARIADB_ROOT_PASSWORD }}
         run: |
           # Deploy the stack using the remote context
           docker --context remote stack deploy -c docker-stack.yml --with-registry-auth $STACK_NAME
