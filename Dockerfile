@@ -17,7 +17,8 @@ FROM nginx:1.27-alpine AS runtime
 
 WORKDIR /usr/share/nginx/html
 COPY --from=builder /app/dist ./
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 80
+EXPOSE 8380
 
 CMD ["nginx", "-g", "daemon off;"]
