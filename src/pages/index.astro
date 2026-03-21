@@ -1,17 +1,22 @@
 ---
 import Layout from "@/layouts/main.astro"
 import { Button } from "@/components/ui/button"
+import BlogPosts from "@/components/BlogPosts.astro"
 ---
 
 <Layout>
-  <div class="flex min-h-svh p-6">
-    <div class="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
-      <div>
-        <h1 class="font-medium">Project ready!</h1>
-        <p>You may now add components and start building.</p>
-        <p>We've already added the button component for you.</p>
-        <Button client:load className="mt-2">Button</Button>
-      </div>
+  <main class="flex flex-col min-h-svh p-6 items-center">
+    <!-- Title -->
+    <div class="flex flex-col items-center">
+      <h1 class="text-4xl font-bold text-center mt-10">Iwan Ingman's Blog</h1>
+      <p class="text-lg text-center text-muted-foreground mt-4">
+        This is my blog.
+      </p>
     </div>
-  </div>
+
+    <!-- Content -->
+    <!-- List Astro posts -->
+    <BlogPosts />
+  </main>
 </Layout>
+
