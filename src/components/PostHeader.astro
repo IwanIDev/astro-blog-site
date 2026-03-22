@@ -12,13 +12,19 @@ interface Props {
 }
 
 const { title, slug, description, author, publishDate } = Astro.props as Props;
+
+const dateFormatter = new Intl.DateTimeFormat('en-GB', {
+  day: '2-digit',
+  month: 'long',
+  year: 'numeric',
+});
 ---
 
 <Card className="w-full">
   <CardHeader>
     <div class="flex flex-wrap gap-2">
       <Badge variant="secondary">{author}</Badge>
-      <Badge variant="outline">{publishDate.toLocaleDateString()}</Badge>
+      <Badge variant="outline">{dateFormatter.format(publishDate)}</Badge>
     </div>
     <h1 class="font-heading text-xl font-medium md:text-2xl" transition:name={`post-title-${slug}`}>{title}</h1>
     <CardDescription>{description}</CardDescription>

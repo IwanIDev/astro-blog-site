@@ -9,6 +9,12 @@ const posts = await getCollection('blog');
 const sortedPosts = posts.sort((a, b) => 
   new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime()
 );
+
+const dateFormatter = new Intl.DateTimeFormat('en-GB', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+});
 ---
 
 <div class="w-full max-w-2xl mx-auto p-4">
@@ -23,7 +29,7 @@ const sortedPosts = posts.sort((a, b) =>
                     </CardHeader>
                     <CardContent>
                         <div class="flex justify-between text-sm text-gray-500">
-                            <span>{post.data.publishDate.toLocaleDateString()}</span>
+                            <span>{dateFormatter.format(post.data.publishDate)}</span>
                             <span>by {post.data.author}</span>
                         </div>
                     </CardContent>
