@@ -22,8 +22,8 @@ const dateFormatter = new Intl.DateTimeFormat('en-GB', {
     <div class="space-y-4 max-h-96 overflow-y-auto">
         {sortedPosts.map((post) => (
             <a href={`/posts/${post.id}`} class="block hover:opacity-80 transition-opacity" data-astro-prefetch>
-                <Card>
-                    <CardHeader>
+                <Card className="border rounded-xl">
+                    <CardHeader className="border-b">
                         <h2 class="font-heading text-sm font-medium" transition:name={`post-title-${post.id}`}>{post.data.title}</h2>
                         <CardDescription>{post.data.description}</CardDescription>
                     </CardHeader>
