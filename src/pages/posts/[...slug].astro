@@ -3,6 +3,7 @@ import { getCollection, type CollectionEntry } from "astro:content";
 import Layout from "@/layouts/main.astro";
 import { buttonVariants } from "@/components/ui/button";
 import PostHeader from "@/components/PostHeader.astro";
+import OpenRing from "@/components/OpenRing.astro";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
@@ -21,7 +22,7 @@ const { post } = Astro.props as Props;
 const { Content } = await post.render();
 ---
 
-<Layout title={`${post.data.title} | Iwan Ingman's Blog`} description={post.data.description}>
+<Layout title={`${post.data.title} | Iwan Ingman&#39;s Blog`} description={post.data.description}>
   <main class="mx-auto flex w-full max-w-3xl flex-col gap-8 p-4 md:p-6">
     <PostHeader
       title={post.data.title}
@@ -38,5 +39,6 @@ const { Content } = await post.render();
     <div>
       <a class={buttonVariants({ size: "xs", variant: "outline" })} href="/">Back to posts</a>
     </div>
+    <OpenRing />
   </main>
 </Layout>
