@@ -8,6 +8,9 @@ import react from "@astrojs/react"
 export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
+    optimizeDeps: {
+      exclude: ['astro/virtual-modules/prefetch.js']
+    }
   },
   integrations: [react()],
   prefetch: true,
