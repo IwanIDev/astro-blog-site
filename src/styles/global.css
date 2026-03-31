@@ -127,4 +127,8 @@
   html {
     @apply font-mono;
     }
+
+  a {
+    @apply hover:underline text-blue-600;
+  }
 }
