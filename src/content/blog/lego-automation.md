@@ -1,9 +1,9 @@
 ---
-Title: LEGO Train Hub Automation with BLE
-Date: 2025-10-16 15:30
-Modified: 2025-10-16 15:30
-Authors: Iwan Ingman
-Summary: Developing LEGO Arduino
+title: LEGO Train Hub Automation with BLE
+publishDate: 2025-10-16
+modified: 2025-10-16
+author: Iwan Ingman
+description: Developing LEGO Arduino
 original_url: lego-train-hub-automation-with-ble.html
 ---
 
