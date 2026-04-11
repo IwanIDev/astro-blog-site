@@ -4,6 +4,7 @@ import Layout from "@/layouts/main.astro";
 import { buttonVariants } from "@/components/ui/button";
 import BlogPostCard from "@/components/BlogPostCard.astro";
 import OpenRing from "@/components/OpenRing.astro";
+import Comments from "@/components/Comments.astro";
 
 export async function getStaticPaths() {
   const posts = await getCollection("blog");
@@ -39,6 +40,9 @@ const { Content } = await post.render();
     <div>
       <a class={buttonVariants({ size: "xs", variant: "outline" })} href="/">Back to posts</a>
     </div>
+
+    <Comments />
+
     <OpenRing />
   </main>
 </Layout>
