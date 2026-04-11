@@ -23,7 +23,7 @@ const { post } = Astro.props as Props;
 const { Content } = await post.render();
 ---
 
-<Layout title={`${post.data.title} | Iwan Ingman&#39;s Blog`} description={post.data.description}>
+<Layout title={`${post.data.title} | Iwan Ingman's Blog`} description={post.data.description}>
   <main class="mx-auto flex w-full max-w-3xl flex-col gap-8 p-4 md:p-6">
     <BlogPostCard
       title={post.data.title}
