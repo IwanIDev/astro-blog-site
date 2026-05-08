@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: astro-blog-web
+  namespace: astro-blog
+  labels:
+    app: astro-blog
+    component: web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: astro-blog
+      component: web
+  template:
+    metadata:
+      labels:
+        app: astro-blog
+        component: web
+    spec:
+      containers:
+      - name: web
+        image: ${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 8380
+          protocol: TCP
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8380
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8380
+          initialDelaySeconds: 5
+          periodSeconds: 5

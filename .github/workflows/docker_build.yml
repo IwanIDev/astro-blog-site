@@ -77,53 +77,49 @@ jobs:
       - name: Lowercase image name
         run: echo "IMAGE_NAME=${IMAGE_NAME,,}" >> $GITHUB_ENV
 
-      - name: Setup SSH key for Docker context
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+
+      - name: Configure kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG }}" | base64 -d > ~/.kube/config
+          chmod 600 ~/.kube/config
+
+      - name: Verify k3s cluster connection
+        run: |
+          kubectl cluster-info
+          kubectl get nodes
+
+      - name: Deploy to k3s
         env:
-          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
-          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
-          DEPLOY_PORT: ${{ secrets.DEPLOY_PORT || 22 }}
+          IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H $DEPLOY_HOST >> ~/.ssh/known_hosts
+          # Create namespace if it doesn't exist
+          kubectl create namespace astro-blog --dry-run=client -o yaml | kubectl apply -f -
           
-          # Create SSH config to use only the specific key and prevent trying multiple auth methods
-          cat > ~/.ssh/config << EOF
-          Host deploy-target
-            HostName $DEPLOY_HOST
-            User $DEPLOY_USER
-            Port $DEPLOY_PORT
-            IdentityFile ~/.ssh/deploy_key
-            IdentitiesOnly yes
-            PubkeyAuthentication yes
-            PasswordAuthentication no
-          EOF
-          chmod 600 ~/.ssh/config
+          # Create image pull secret for GitHub Container Registry
+          kubectl create secret docker-registry ghcr-secret \
+            --docker-server=${{ env.REGISTRY }} \
+            --docker-username=${{ github.actor }} \
+            --docker-password=${{ secrets.GITHUB_TOKEN }} \
+            --docker-email=github@example.com \
+            -n astro-blog \
+            --dry-run=client -o yaml | kubectl apply -f -
           
-          # Test the connection
-          ssh -o BatchMode=yes deploy-target "echo 'SSH connection successful'"
+          # Update deployment image
+          kubectl set image deployment/astro-blog-web \
+            web=${{ env.IMAGE }} \
+            -n astro-blog \
+            --record
 
-      - name: Create Docker context
+      - name: Verify deployment
         run: |
-          docker context create remote --docker "host=ssh://deploy-target"
-          docker context use remote
-          docker context ls
-
-      - name: Log in to GitHub Container Registry on remote
-        run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker --context remote login ${{ env.REGISTRY }} -u ${{ github.actor }} --password-stdin
-
-      - name: Deploy stack to remote server
-        env:
-          IMAGE_NAME: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-          STACK_NAME: astro-blog-site
-        run: |
-          # Deploy the stack using the remote context
-          docker --context remote stack deploy -c docker-stack.yml --with-registry-auth $STACK_NAME
-
-          # Wait for services to be ready
-          sleep 10
-
-          # Display stack services status
-          docker --context remote stack services $STACK_NAME
+          # Wait for rollout to complete
+          kubectl rollout status deployment/astro-blog-web -n astro-blog --timeout=5m
+          
+          # Show deployment status
+          kubectl get deployments -n astro-blog
+          kubectl get pods -n astro-blog
+          kubectl get svc -n astro-blog
+          kubectl get ingress -n astro-blog
