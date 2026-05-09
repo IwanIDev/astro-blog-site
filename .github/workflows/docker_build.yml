@@ -83,7 +83,9 @@ jobs:
           version: 'latest'
       
       - name: Set kubeconfig
-        run: echo "${{ secrets.KUBECONFIG }} | base64 --decode" > $HOME/.kube/config
+        run: |
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBECONFIG }} | base64 --decode" > $HOME/.kube/config
 
       - name: Deploy to Kubernetes
         run: |
