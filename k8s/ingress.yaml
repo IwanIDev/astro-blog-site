@@ -6,12 +6,11 @@ metadata:
   labels:
     app: astro-blog
   annotations:
-    # For k3s, traefik is the default ingress controller
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"  # Optional: if using cert-manager
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
-  ingressClassName: traefik  # k3s default
+  ingressClassName: traefik
   rules:
-  - host: yourdomain.com  # Change this to your domain
+  - host: www.iwaningman.com
     http:
       paths:
       - path: /
@@ -21,8 +20,3 @@ spec:
             name: astro-blog-web
             port:
               number: 80
-  # TLS configuration (optional, requires cert-manager)
-  # tls:
-  # - hosts:
-  #   - yourdomain.com
-  #     secretName: astro-blog-tls

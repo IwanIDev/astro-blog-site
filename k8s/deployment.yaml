@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: web
-        image: ${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}
+        image: ghcr.io/iwanidev/astro-blog-site:latest
         imagePullPolicy: IfNotPresent
         ports:
         - name: http
