@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: astro-blog-web
+  namespace: astro-blog
+  labels:
+    app: astro-blog
+    component: web
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 8380
+    protocol: TCP
+    name: http
+  selector:
+    app: astro-blog
+    component: web
