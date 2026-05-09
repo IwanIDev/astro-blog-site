@@ -91,4 +91,4 @@ jobs:
       - name: Deploy to Kubernetes
         run: |
           kubectl apply -f k8s/
-          kubectl rollout restart deployment astro-blog-web
+          kubectl rollout restart deployment astro-blog-web -n astro-blog
