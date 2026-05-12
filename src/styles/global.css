@@ -134,6 +134,10 @@
     @apply font-sans;
     }
 
+    p {
+      @apply mb-4 leading-7 text-muted-foreground;
+    }
+
   p > a {
     @apply hover:underline text-blue-600;
   }
