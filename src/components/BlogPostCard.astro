@@ -1,8 +1,4 @@
 ---
-import { Card, CardContent, CardDescription, CardHeader, CardFooter } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-
 interface Props {
   title: string;
   slug: string;
@@ -20,15 +16,11 @@ const dateFormatter = new Intl.DateTimeFormat('en-GB', {
 });
 ---
 
-<Card className="border rounded-none">
-    <CardHeader className="border-b">
-        <h2 class="font-heading text-sm font-medium" transition:name={`post-title-${slug}`}>{title}</h2>
-        <CardDescription>{description}</CardDescription>
-    </CardHeader>
-    <CardContent>
-      <div class="flex flex-wrap gap-2">
-        <Badge variant="secondary">{author}</Badge>
-        <Badge variant="outline">{dateFormatter.format(publishDate)}</Badge>
-      </div>
-    </CardContent>
-</Card>
+<div class="flex pb-4 md:pb-2 pt-3 flex-col md:flex-row items-start">
+  <div class="flex-auto md:w-9/12 relative top-[2px]">
+    <h1 class="text-xl">{title}</h1>
+  </div>
+  <div class="md:w-3/12 md:pl-4 md:shrink-0 text-sm relative top-px text-gray-400">
+    {dateFormatter.format(publishDate)}
+  </div>
+</div>
