@@ -9,9 +9,6 @@ original_url: lego-train-hub-automation-with-ble.html
 
 Please view [https://github.com/iwanidev/lego-arduino-train](https://github.com/iwanidev/lego-arduino-train) 
 
-
-# LEGO Train Controller
-
 [![arduino-library-badge](https://www.ardu-badge.com/badge/LEGOTrainController.svg?)](https://www.ardu-badge.com/LEGOTrainController)
 
 An Arduino library for controlling LEGO Powered Up trains with automated layouts, sensor-based automation, and intelligent routing.

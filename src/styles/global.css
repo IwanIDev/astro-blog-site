@@ -126,17 +126,23 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
-    }
+  }
+
   body {
-    @apply bg-background text-foreground;
-    }
+    @apply bg-background text-foreground !text-gray-300;
+  }
+
   html {
     @apply font-sans;
-    }
+  }
 
-    p {
-      @apply mb-4 leading-7 text-muted-foreground;
-    }
+  p {
+    @apply mb-4 leading-7 !text-gray-300;
+  }
+
+  li {
+    @apply !text-gray-300;
+  }
 
   p > a {
     @apply hover:underline text-blue-600;

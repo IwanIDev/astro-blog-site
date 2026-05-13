@@ -21,7 +21,7 @@ spec:
       containers:
       - name: web
         image: ghcr.io/iwanidev/astro-blog-site:latest
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         ports:
         - name: http
           containerPort: 8380

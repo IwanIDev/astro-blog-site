@@ -21,7 +21,7 @@ const dateFormatter = new Intl.DateTimeFormat('en-GB', {
 
 <div class="space-y-4 max-h-96 divide-y divide-zinc-700">
     {sortedPosts.map((post) => (
-        <a href={`/posts/${post.id}`} class="block hover:opacity-80 transition-opacity" data-astro-prefetch>
+        <a href={`/posts/${post.slug}`} class="block hover:opacity-80 transition-opacity" data-astro-prefetch>
           <BlogPostCard
             title={post.data.title}
             slug={post.id}

@@ -10,7 +10,7 @@ export async function getStaticPaths() {
   const posts = await getCollection("blog");
 
   return posts.map((post) => ({
-    params: { slug: post.id },
+    params: { slug: post.slug },
     props: { post },
   }));
 }
@@ -38,7 +38,7 @@ const { Content } = await post.render();
     </article>
 
     <div>
-      <a class={buttonVariants({ size: "xs", variant: "outline" })} href="/">Back to posts</a>
+      <a class={buttonVariants({ size: "xs", variant: "outline" })} href="/blog">Back to posts</a>
     </div>
 
     <Comments />
