@@ -1,0 +1,19 @@
+---
+import childProcess from "child_process";
+ 
+// obtain Git commit hash
+const hash = childProcess
+  .execSync("git rev-parse --short HEAD")
+  .toString()
+  .trim();
+
+const year = new Date().getFullYear();
+---
+<div class="footer mx-auto py-4 text-center">
+  <p class="text-sm text-gray-500">
+  &copy; {year} Iwan Ingman. All rights reserved.
+  </p>
+  <p class="text-sm text-gray-500">
+  (commit {hash})
+  </p>
+</div>
