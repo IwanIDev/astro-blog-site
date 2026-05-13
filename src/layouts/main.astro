@@ -34,12 +34,14 @@ const {
           </nav>
         </div>
       </aside>
-      <main class="flex-grow min-w-0 mt-6 md:mt-0 flex flex-col">
-        <slot />
-        <div class="px-4 md:px-0 mt-8">
+      <div class="flex-grow min-w-0 mt-6 md:mt-0 flex flex-col">
+        <main class="flex-grow min-w-0 fade">
+          <slot />
+        </main>
+        <footer class="px-4 md:px-0 mt-8">
           <Footer />
-        </div>
-      </main>
+        </footer>
+      </div>
     </div>
     <script is:inline>
       function loadGiscus() {
