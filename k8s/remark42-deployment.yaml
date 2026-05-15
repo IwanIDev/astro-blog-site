@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: remark42
+  namespace: astro-blog
+  labels:
+    app: remark42
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: remark42
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: remark42
+    spec:
+      containers:
+      - name: remark42
+        image: ghcr.io/umputun/remark42:v1.15.0
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        env:
+        - name: REMARK_URL
+          value: https://comments.iwaningman.com/
+        - name: SITE
+          value: www.iwaningman.com
+        - name: AUTH_ANON
+          value: "true"
+        - name: SECRET
+          valueFrom:
+            secretKeyRef:
+              name: remark42
+              key: SECRET
+        volumeMounts:
+        - name: srvvar
+          mountPath: /srv/var
+        securityContext:
+          readOnlyRootFilesystem: false
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: "1"
+            memory: 512Mi
+      volumes:
+      - name: srvvar
+        persistentVolumeClaim:
+          claimName: remark42

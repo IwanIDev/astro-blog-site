@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: remark42
+  namespace: astro-blog
+  labels:
+    app: remark42
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: traefik
+  tls:
+  - hosts:
+    - comments.iwaningman.com
+    secretName: remark42-tls
+  rules:
+  - host: comments.iwaningman.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: remark42-web
+            port:
+              number: 80

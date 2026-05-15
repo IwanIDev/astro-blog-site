@@ -44,45 +44,87 @@ const {
       </div>
     </div>
     <script is:inline>
-      function loadGiscus() {
-        const container = document.getElementById("giscus");
-        if (!container) return;
+      const remark42Host = "https://comments.iwaningman.com";
+      const remark42SiteId = "www.iwaningman.com";
+      const remark42ScriptId = "remark42-embed-script";
 
-        // If Giscus already exists, do nothing
-        if (container.querySelector("iframe")) return;
+      let remark42Instance = null;
+
+      function getRemark42Url() {
+        return window.location.origin + window.location.pathname;
+      }
+
+      function setRemark42Config() {
+        window.remark_config = {
+          host: remark42Host,
+          site_id: remark42SiteId,
+          url: getRemark42Url(),
+          page_title: document.title,
+          theme: "dark",
+          components: ["embed"],
+        };
+      }
+
+      function loadRemark42Script() {
+        setRemark42Config();
+
+        if (document.getElementById(remark42ScriptId)) return;
 
         const script = document.createElement("script");
-        script.src = "https://giscus.app/client.js";
+        script.id = remark42ScriptId;
         script.async = true;
-        script.crossOrigin = "anonymous";
-
-        script.setAttribute("data-repo", "iwanidev/astro-blog-site");
-        script.setAttribute("data-repo-id", "R_kgDORs8Kcg");
-        script.setAttribute("data-category", "Comments");
-        script.setAttribute("data-category-id", "DIC_kwDORs8Kcs4C6nPl");
-        script.setAttribute("data-mapping", "pathname");
-        script.setAttribute("data-strict", "0");
-        script.setAttribute("data-reactions-enabled", "1");
-        script.setAttribute("data-emit-metadata", "0");
-        script.setAttribute("data-input-position", "bottom");
-        script.setAttribute("data-theme", "catppuccin_macchiato");
-        script.setAttribute("data-lang", "en");
-
-        container.appendChild(script);
+        script.defer = true;
+        script.src = `${remark42Host}/web/embed.js`;
+        document.body.appendChild(script);
       }
 
-      function resetGiscus() {
-        const container = document.getElementById("giscus");
-        if (container) container.innerHTML = "";
+      function destroyRemark42() {
+        if (remark42Instance) {
+          remark42Instance.destroy();
+          remark42Instance = null;
+        }
       }
 
-      // Initial load
-      loadGiscus();
+      function mountRemark42() {
+        const container = document.getElementById("remark42");
+        if (!container) return;
 
-      // Reload on Astro client navigation
+        if (!window.REMARK42) return;
+
+        setRemark42Config();
+        destroyRemark42();
+        container.innerHTML = "";
+        remark42Instance = window.REMARK42.createInstance({
+          node: container,
+          host: remark42Host,
+          site_id: remark42SiteId,
+          url: getRemark42Url(),
+          page_title: document.title,
+          theme: "dark",
+          components: ["embed"],
+        });
+      }
+
+      function initRemark42() {
+        destroyRemark42();
+
+        const container = document.getElementById("remark42");
+        if (!container) return;
+
+        loadRemark42Script();
+
+        if (window.REMARK42) {
+          mountRemark42();
+          return;
+        }
+
+        window.addEventListener("REMARK42::ready", mountRemark42, { once: true });
+      }
+
+      initRemark42();
+
       document.addEventListener("astro:page-load", () => {
-        resetGiscus();
-        loadGiscus();
+        initRemark42();
       });
 </script>
   </body>

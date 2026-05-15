@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: remark42-web
+  namespace: astro-blog
+  labels:
+    app: remark42
+spec:
+  type: ClusterIP
+  selector:
+    app: remark42
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080
+    protocol: TCP
