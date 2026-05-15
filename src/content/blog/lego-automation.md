@@ -265,7 +265,7 @@ Contributions are welcome, especially if you can port this over to new platforms
 
 ## License
 
-This project is licensed under the MIT License (see the [LICENSE](LICENSE) file for details).
+This project is licensed under the MIT License (see the [LICENSE](https://github.com/IwanIDev/lego-arduino-train/blob/main/LICENSE) file for details).
 
 ## Acknowledgments
 
