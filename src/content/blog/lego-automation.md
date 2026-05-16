@@ -25,8 +25,8 @@ An Arduino library for controlling LEGO Powered Up trains with automated layouts
 
 - Arduino ESP32 or compatible microcontroller
 - One or more LEGO Powered Up train hubs
-- _Optional_: Reed switch sensors for position detection
-- _Optional_: Relay modules for track switch control
+- _Optional:_ Reed switch sensors for position detection
+- _Optional:_ Relay modules for track switch control
 
 ## Installation
 
