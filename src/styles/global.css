@@ -167,4 +167,18 @@
   h4, h5, h6 {
     @apply text-xl font-bold text-white;
   }
+
+  #article {
+    > ul {
+      @apply list-disc ml-6;
+    }
+    
+    > ol {
+      @apply list-decimal ml-6;
+    }
+
+    > .astro-code {
+      @apply bg-card text-card-foreground p-4 rounded-lg;
+    }
+  }
 }
