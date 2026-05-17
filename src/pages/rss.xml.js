@@ -26,7 +26,7 @@ export async function GET(context) {
         pubDate: post.data.pubDate,
         link: `${context.site}posts/${post.slug}`,
         description: post.data.description,
-        content: html,
+        content: sanitisedContent,
       };
     })),
   });
