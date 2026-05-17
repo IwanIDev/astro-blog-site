@@ -15,4 +15,5 @@ export default defineConfig({
   },
   integrations: [react()],
   prefetch: true,
+  site: "https://www.iwaningman.com",
 })
