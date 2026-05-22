@@ -30,7 +30,7 @@ const {
           </div>
           <nav class="flex flex-row md:flex-col items-start relative overflow-scroll px-4 md:px-0 pb-4 md:pb-0 fade md:overflow-auto scroll-pr-6 md:relative">
             <a href="/" class={`text-sm font-medium ${Astro.url.pathname === '/' ? 'text-gray-500' : 'text-gray-500'} hover:text-gray-900 mr-4 md:mr-0 mb-2 md:mb-4`}>Home</a>
-            <a href="/blog" class={`text-sm font-medium ${Astro.url.pathname === '/blog' || Astro.url.pathname.startsWith("/posts/") ? 'text-gray-500' : 'text-gray-500'} hover:text-gray-900 mr-4 md:mr-0 mb-2 md:mb-4`}>Blog</a>
+            <a href="/posts" class={`text-sm font-medium ${Astro.url.pathname === '/blog' || Astro.url.pathname.startsWith("/posts/") ? 'text-gray-500' : 'text-gray-500'} hover:text-gray-900 mr-4 md:mr-0 mb-2 md:mb-4`}>Blog</a>
           </nav>
         </div>
       </aside>
