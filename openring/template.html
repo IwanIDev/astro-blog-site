@@ -4,18 +4,35 @@
 
   <div class="space-y-3">
     {{range .Articles}}
-    <article class="rounded-lg border bg-card text-card-foreground p-4">
-      <h3 class="text-base font-semibold leading-tight">
-        <a href="{{.Link}}" target="_blank" rel="noopener noreferrer" class="hover:underline">{{.Title}}</a>
-      </h3>
-      <p class="mt-2 text-sm text-muted-foreground">{{.Summary}}</p>
-      <p class="mt-3 text-xs text-muted-foreground">
+    <!-- <article class="rounded-lg border bg-card text-card-foreground p-4"> -->
+    <!--   <h3 class="text-base font-semibold leading-tight"> -->
+    <!--     <a href="{{.Link}}" target="_blank" rel="noopener noreferrer" class="hover:underline">{{.Title}}</a> -->
+    <!--   </h3> -->
+    <!--   <p class="mt-3 text-xs text-muted-foreground"> -->
+    <!--     <span>via <a href="{{.SourceLink}}" target="_blank" rel="noopener noreferrer" class="hover:underline">{{.SourceTitle}}</a></span> -->
+    <!--     <span class="mx-1">-</span> -->
+    <!--     <time datetime="{{.Date | datef "2006-01-02"}}">{{.Date | datef "Jan 2, 2006"}}</time> -->
+    <!--   </p> -->
+    <!-- </article> -->
+    <div class="flex flex-col items-baseline">
+      <!-- Title and date (row)-->
+      <div class="flex pb-4 md:pb-2 pt-3 flex-col md:flex-row items-end w-full">
+        <div class="flex-auto md:w-9/12 relative top-[2px]">
+          <h1 class="text-lg">
+            <a href="{{.Link}}" target="_blank" rel="noopener noreferrer" class="hover:underline">{{.Title}}</a>
+          </h1>
+        </div>
+        <div class="md:w-3/12 md:pl-4 md:shrink-0 text-sm relative top-px text-gray-400">
+          <time datetime="{{.Date | datef "2006-01-02"}}">{{.Date | datef "2 Jan, 2006"}}</time>
+        </div>
+      </div>
+      <!-- Source (row) -->
+      <div class="flex items-center text-sm text-gray-400">
         <span>via <a href="{{.SourceLink}}" target="_blank" rel="noopener noreferrer" class="hover:underline">{{.SourceTitle}}</a></span>
-        <span class="mx-1">-</span>
-        <time datetime="{{.Date | datef "2006-01-02"}}">{{.Date | datef "Jan 2, 2006"}}</time>
-      </p>
-    </article>
+      </div>
+    </div>
     {{end}}
+
   </div>
 
   <p class="text-xs text-muted-foreground">

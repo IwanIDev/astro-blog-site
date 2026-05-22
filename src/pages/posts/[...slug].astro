@@ -25,21 +25,22 @@ const { Content } = await post.render();
 
 <Layout title={`${post.data.title} | Iwan Ingman's Blog`} description={post.data.description}>
   <div class="mx-auto flex w-full max-w-3xl flex-col gap-8 px-4">
-    <BlogPostCard
-      title={post.data.title}
-      slug={post.id}
-      description={post.data.description}
-      author={post.data.author}
-      publishDate={post.data.publishDate}
-    />
+    <div class="flex flex-col text-sm text-muted-foreground transition-colors hover:text-primary">
+      <a href="/blog" class="flex items-center gap-1">
+        <span>← Back to Posts</span>
+      </a>
+      <BlogPostCard
+        title={post.data.title}
+        slug={post.id}
+        description={post.data.description}
+        author={post.data.author}
+        publishDate={post.data.publishDate}
+      />
+    </div>
 
     <article class="space-y-4 leading-relaxed" id="article">
       <Content />
     </article>
-
-    <div>
-      <a class={buttonVariants({ size: "xs", variant: "outline" })} href="/blog">Back to posts</a>
-    </div>
 
     <OpenRing />
 
