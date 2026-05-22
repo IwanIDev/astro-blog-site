@@ -24,9 +24,9 @@ const { Content } = await post.render();
 ---
 
 <Layout title={`${post.data.title} | Iwan Ingman's Blog`} description={post.data.description}>
-  <div class="mx-auto flex w-full max-w-3xl flex-col gap-8 px-4">
-    <div class="flex flex-col text-sm text-muted-foreground transition-colors hover:text-primary">
-      <a href="/blog" class="flex items-center gap-1">
+  <div class="flex w-full flex-col gap-8 px-4">
+    <div class="flex flex-col text-sm text-muted-foreground">
+      <a href="/blog" class="flex items-center gap-1 transition-colors hover:text-primary">
         <span>← Back to Posts</span>
       </a>
       <BlogPostCard
