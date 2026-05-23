@@ -1,6 +1,6 @@
 ---
-title: Contact - Iwan Ingman
 layout: ../layouts/main.astro
+title: Contact - Iwan Ingman
 ---
 
 Contact

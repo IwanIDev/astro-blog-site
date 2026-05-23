@@ -1,16 +1,18 @@
 ---
 import "@/styles/global.css"
 import Footer from "@/components/Footer.astro";
+import type { MarkdownLayoutProps } from "astro";
 
-interface Props {
-  title?: string;
-  description?: string;
+const { frontmatter } = Astro.props;
+type ComponentProps = {
+  title: string;
+  description: string;
 }
 
-const {
-  title = "Astro App",
-  description = "Astro blog"
-} = Astro.props as Props;
+type Props = MarkdownLayoutProps<ComponentProps> | ComponentProps;
+
+const props = Astro.props.frontmatter ?? Astro.props;
+const { title, description } = props;
 ---
 
 <html lang="en">
