@@ -1,4 +1,4 @@
 ---
-const umamiID = import.meta.env.UMAMI_SITE_ID;
+const umamiID = process.env.UMAMI_SITE_ID;
 ---
 {umamiID && <script defer src="https://cloud.umami.is/script.js" data-website-id={umamiID} /></script>}
