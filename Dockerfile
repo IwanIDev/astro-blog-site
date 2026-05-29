@@ -3,6 +3,7 @@ FROM oven/bun:1.2.22-alpine AS builder
 WORKDIR /app
 
 ARG OPENRING_VERSION=latest
+ARG UMAMI_SITE_ID
 ENV PATH="/root/go/bin:${PATH}"
 
 RUN apk add --no-cache go git ca-certificates && \
