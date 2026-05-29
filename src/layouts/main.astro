@@ -13,6 +13,9 @@ type Props = MarkdownLayoutProps<ComponentProps> | ComponentProps;
 
 const props = Astro.props.frontmatter ?? Astro.props;
 const { title, description } = props;
+
+// Get Umami tracking ID from environment
+const umamiTrackingId = import.meta.env.UMAMI_SITE_ID;
 ---
 
 <html lang="en">
@@ -22,6 +25,7 @@ const { title, description } = props;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
     <meta name="description" content={description} />
+<script defer src="https://cloud.umami.is/script.js" data-website-id={ umamiTrackingId }></script>
   </head>
   <body class="flex flex-col min-h-screen bg-slate-800 text-gray-900">
     <div class="mb-40 flex w-full max-w-5xl flex-col md:flex-row gap-0 px-4 mt-8 md:mt-20 lg:mt-32 lg:px-12 lg:mx-auto">
