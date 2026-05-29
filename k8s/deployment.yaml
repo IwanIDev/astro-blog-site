@@ -22,12 +22,6 @@ spec:
       - name: web
         image: ghcr.io/iwanidev/astro-blog-site:latest
         imagePullPolicy: Always
-        env:
-        - name: UMAMI_SITE_ID
-          valueFrom:
-            secretKeyRef:
-              name: astro-blog
-              key: UMAMI_SITE_ID 
         ports:
         - name: http
           containerPort: 8380
