@@ -2,6 +2,7 @@
 import "@/styles/global.css"
 import Footer from "@/components/Footer.astro";
 import type { MarkdownLayoutProps } from "astro";
+import UmamiTracking from "@/components/UmamiTracking.astro";
 
 const { frontmatter } = Astro.props;
 type ComponentProps = {
@@ -14,8 +15,7 @@ type Props = MarkdownLayoutProps<ComponentProps> | ComponentProps;
 const props = Astro.props.frontmatter ?? Astro.props;
 const { title, description } = props;
 
-// Get Umami tracking ID from environment
-const umamiTrackingId = import.meta.env.UMAMI_SITE_ID;
+const showTracker = import.meta.env.PROD;
 ---
 
 <html lang="en">
@@ -25,7 +25,7 @@ const umamiTrackingId = import.meta.env.UMAMI_SITE_ID;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
     <meta name="description" content={description} />
-<script defer src="https://cloud.umami.is/script.js" data-website-id={ umamiTrackingId }></script>
+    {showTracker && <UmamiTracking />}
   </head>
   <body class="flex flex-col min-h-screen bg-slate-800 text-gray-900">
     <div class="mb-40 flex w-full max-w-5xl flex-col md:flex-row gap-0 px-4 mt-8 md:mt-20 lg:mt-32 lg:px-12 lg:mx-auto">
