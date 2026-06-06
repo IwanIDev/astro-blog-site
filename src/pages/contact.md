@@ -8,4 +8,4 @@ Contact
 
 You can reach me via email at [iwan@iwani.dev](mailto:iwan@iwani.dev).
 
-I welcome encrypted emails with PGP, and my public key can be found [here](https://keys.openpgp.org/vks/v1/by-fingerprint/3B34248084CBAF9A784AA16F6224545C560A1482).
+I welcome encrypted emails with PGP, and my public key can be found [here](https://keys.openpgp.org/vks/v1/by-fingerprint/C51A4575CFD13C0B88EE0D4FA78BA6A2DDEFC40D).
