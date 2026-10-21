@@ -10,7 +10,15 @@ This Terraform configuration provisions the AWS hosting architecture for the Ast
 
 ## Usage
 
-Copy `terraform.tfvars.example` to `terraform.tfvars` and adjust the values if needed. The Route 53 hosted zone must already exist in the AWS account.
+The Route 53 hosted zone must already exist in the AWS account. The first deployment also needs:
+
+- An S3 bucket for Terraform state, configured as the `TF_STATE_BUCKET` GitHub repository variable.
+- An existing AWS IAM role trusted by this repository's GitHub OIDC subject, configured as the `TERRAFORM_ROLE_ARN` repository variable. This bootstrap role needs permission to manage the resources in `main.tf`.
+- An optional `AWS_REGION` repository variable; it defaults to `eu-west-2`.
+
+The bootstrap role is only needed to run Terraform. Terraform creates the narrower `github_actions_role_arn` role, which the workflow assumes for subsequent S3 and CloudFront deployment steps.
+
+For local use, copy `terraform.tfvars.example` to `terraform.tfvars` and adjust the values if needed:
 
 ```sh
 terraform init
@@ -20,6 +28,14 @@ terraform plan
 terraform apply
 ```
 
-The apply outputs include the S3 bucket name, CloudFront distribution ID, and IAM role ARN needed by the deployment workflow.
+For a local backend initialization, supply the state bucket explicitly:
 
-The GitHub Actions workflow should assume `github_actions_role_arn`, sync `dist/` to `s3_bucket_name`, and create a CloudFront invalidation using `cloudfront_distribution_id`.
+```sh
+terraform init \
+  -backend-config="bucket=YOUR_TF_STATE_BUCKET" \
+  -backend-config="key=astro-blog-site/terraform.tfstate" \
+  -backend-config="region=eu-west-2" \
+  -backend-config="use_lockfile=true"
+```
+
+The apply outputs include the S3 bucket name, CloudFront distribution ID, and IAM role ARN used by the GitHub Actions deployment.
