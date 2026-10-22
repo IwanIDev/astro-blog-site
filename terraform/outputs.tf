@@ -22,3 +22,8 @@ output "site_url" {
   description = "Public site URL."
   value       = "https://${var.domain_name}"
 }
+
+output "route53_dnssec_ds_record" {
+  description = "DS record to publish at the domain registrar to complete DNSSEC activation."
+  value       = aws_route53_key_signing_key.site.ds_record
+}

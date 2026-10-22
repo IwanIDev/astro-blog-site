@@ -5,6 +5,70 @@ data "aws_route53_zone" "site" {
   private_zone = false
 }
 
+data "aws_iam_policy_document" "route53_dnssec_kms" {
+  statement {
+    sid    = "EnableRootAccountPermissions"
+    effect = "Allow"
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
+    }
+
+    actions   = ["kms:*"]
+    resources = ["*"]
+  }
+
+  statement {
+    sid    = "AllowRoute53DnssecSigning"
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["dnssec-route53.amazonaws.com"]
+    }
+
+    actions = [
+      "kms:DescribeKey",
+      "kms:GetPublicKey",
+      "kms:Sign",
+    ]
+    resources = ["*"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceAccount"
+      values   = [data.aws_caller_identity.current.account_id]
+    }
+
+    condition {
+      test     = "ArnEquals"
+      variable = "aws:SourceArn"
+      values   = ["arn:aws:route53:::hostedzone/${data.aws_route53_zone.site.zone_id}"]
+    }
+  }
+}
+
+resource "aws_kms_key" "route53_dnssec" {
+  provider                 = aws.us_east_1
+  description              = "Route 53 DNSSEC signing key for ${var.hosted_zone_name}"
+  customer_master_key_spec = "RSA_2048"
+  key_usage                = "SIGN_VERIFY"
+  policy                   = data.aws_iam_policy_document.route53_dnssec_kms.json
+}
+
+resource "aws_route53_key_signing_key" "site" {
+  hosted_zone_id             = data.aws_route53_zone.site.zone_id
+  key_management_service_arn = aws_kms_key.route53_dnssec.arn
+  name                       = "iwaningman-com"
+}
+
+resource "aws_route53_hosted_zone_dnssec" "site" {
+  hosted_zone_id = data.aws_route53_zone.site.zone_id
+
+  depends_on = [aws_route53_key_signing_key.site]
+}
+
 data "tls_certificate" "github_actions" {
   url = "https://token.actions.githubusercontent.com"
 }
