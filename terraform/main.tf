@@ -47,6 +47,25 @@ data "aws_iam_policy_document" "route53_dnssec_kms" {
       values   = ["arn:aws:route53:::hostedzone/${data.aws_route53_zone.site.zone_id}"]
     }
   }
+
+  statement {
+    sid    = "AllowRoute53DnssecCreateGrant"
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["dnssec-route53.amazonaws.com"]
+    }
+
+    actions   = ["kms:CreateGrant"]
+    resources = ["*"]
+
+    condition {
+      test     = "Bool"
+      variable = "kms:GrantIsForAWSResource"
+      values   = ["true"]
+    }
+  }
 }
 
 resource "aws_kms_key" "route53_dnssec" {
