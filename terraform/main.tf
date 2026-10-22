@@ -129,6 +129,26 @@ resource "aws_cloudfront_function" "directory_index" {
       var request = event.request;
       var uri = request.uri;
       var host = request.headers.host.value;
+      var query = '';
+      var queryKeys = Object.keys(request.querystring);
+
+      if (queryKeys.length > 0) {
+        var queryParts = [];
+
+        queryKeys.forEach(function (key) {
+          var parameter = request.querystring[key];
+
+          if (parameter.multiValue) {
+            parameter.multiValue.forEach(function (value) {
+              queryParts.push(key + '=' + value.value);
+            });
+          } else {
+            queryParts.push(key + '=' + parameter.value);
+          }
+        });
+
+        query = '?' + queryParts.join('&');
+      }
 
       if (host === "${var.root_domain_name}") {
         return {
@@ -136,7 +156,7 @@ resource "aws_cloudfront_function" "directory_index" {
           statusDescription: 'Moved Permanently',
           headers: {
             location: {
-              value: 'https://${var.domain_name}' + uri
+              value: 'https://${var.domain_name}' + uri + query
             }
           }
         };
