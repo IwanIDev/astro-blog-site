@@ -60,6 +60,7 @@ resource "aws_cloudfront_origin_access_control" "site" {
 resource "aws_acm_certificate" "site" {
   provider          = aws.us_east_1
   domain_name       = var.domain_name
+  subject_alternative_names = [var.root_domain_name]
   validation_method = "DNS"
 
   lifecycle {
@@ -91,11 +92,46 @@ resource "aws_acm_certificate_validation" "site" {
   validation_record_fqdns = [for record in aws_route53_record.certificate_validation : record.fqdn]
 }
 
+resource "aws_cloudfront_function" "directory_index" {
+  name    = "astro-blog-directory-index"
+  runtime = "cloudfront-js-2.0"
+  publish = true
+  comment = "Redirect apex domain and map Astro pretty URLs to index.html files"
+
+  code = <<-EOF
+    function handler(event) {
+      var request = event.request;
+      var uri = request.uri;
+      var host = request.headers.host.value;
+
+      if (host === "${var.root_domain_name}") {
+        return {
+          statusCode: 301,
+          statusDescription: 'Moved Permanently',
+          headers: {
+            location: {
+              value: 'https://${var.domain_name}' + uri
+            }
+          }
+        };
+      }
+
+      if (uri.endsWith('/')) {
+        request.uri = uri + 'index.html';
+      } else if (!uri.includes('.')) {
+        request.uri = uri + '/index.html';
+      }
+
+      return request;
+    }
+  EOF
+}
+
 resource "aws_cloudfront_distribution" "site" {
   enabled             = true
   comment             = "Astro blog - ${var.domain_name}"
   default_root_object = "index.html"
-  aliases             = [var.domain_name]
+  aliases             = [var.domain_name, var.root_domain_name]
   price_class         = "PriceClass_100"
 
   origin {
@@ -117,6 +153,11 @@ resource "aws_cloudfront_distribution" "site" {
       cookies {
         forward = "none"
       }
+    }
+
+    function_association {
+      event_type   = "viewer-request"
+      function_arn = aws_cloudfront_function.directory_index.arn
     }
   }
 
@@ -220,6 +261,18 @@ resource "aws_iam_role_policy" "github_deploy" {
 resource "aws_route53_record" "site" {
   zone_id = data.aws_route53_zone.site.zone_id
   name    = var.domain_name
+  type    = "A"
+
+  alias {
+    name                   = aws_cloudfront_distribution.site.domain_name
+    zone_id                = aws_cloudfront_distribution.site.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
+resource "aws_route53_record" "root" {
+  zone_id = data.aws_route53_zone.site.zone_id
+  name    = var.root_domain_name
   type    = "A"
 
   alias {

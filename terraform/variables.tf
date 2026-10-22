@@ -1,13 +1,19 @@
 variable "aws_region" {
   description = "AWS region for the S3 bucket and regional resources."
   type        = string
-  default     = "eu-west-2"
+  default     = "eu-north-1"
 }
 
 variable "domain_name" {
   description = "Primary public hostname for the site."
   type        = string
   default     = "www.iwaningman.com"
+}
+
+variable "root_domain_name" {
+  description = "Apex hostname that redirects to the primary public hostname."
+  type        = string
+  default     = "iwaningman.com"
 }
 
 variable "hosted_zone_name" {
