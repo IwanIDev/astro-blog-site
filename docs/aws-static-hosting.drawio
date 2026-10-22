@@ -1,0 +1,69 @@
+<mxfile host="app.diagrams.net" agent="GitHub Copilot">
+  <diagram id="aws-static-hosting" name="AWS Static Hosting">
+    <mxGraphModel dx="1518" dy="1128" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="O3BHsCiM6bdb2CC6_rJy-1" parent="1" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_aws_cloud_alt;strokeColor=#232F3E;fillColor=default;verticalAlign=top;align=left;spacingLeft=30;fontColor=#232F3E;dashed=0;fontFamily=Verdana;" value="AWS Cloud" vertex="1">
+          <mxGeometry height="400" width="950" x="700" y="145" as="geometry" />
+        </mxCell>
+        <mxCell id="route53" parent="O3BHsCiM6bdb2CC6_rJy-1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5F5E3;strokeColor=#249B59;fontColor=#172B4D;align=center;verticalAlign=middle;fontSize=15;spacing=8;fontFamily=Verdana;" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;Amazon Route 53&lt;/b&gt;&lt;br&gt;Hosted zone&lt;br&gt;Alias: www.iwaningman.com&lt;br&gt;→ CloudFront&lt;/font&gt;" vertex="1">
+          <mxGeometry height="105" width="180" x="750" y="155" as="geometry" />
+        </mxCell>
+        <mxCell id="s3" parent="O3BHsCiM6bdb2CC6_rJy-1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5F5E3;strokeColor=#249B59;fontColor=#172B4D;align=center;verticalAlign=middle;fontSize=15;spacing=8;fontFamily=Verdana;" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;Amazon S3&lt;/b&gt;&lt;br&gt;Private static website bucket&lt;br&gt;Astro &lt;i&gt;dist&lt;/i&gt;/ files&lt;/font&gt;" vertex="1">
+          <mxGeometry height="105" width="220" x="450" y="85" as="geometry" />
+        </mxCell>
+        <mxCell id="cloudfront" parent="O3BHsCiM6bdb2CC6_rJy-1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5F5E3;strokeColor=#249B59;fontColor=#172B4D;align=center;verticalAlign=middle;fontSize=15;spacing=8;fontFamily=Verdana;" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;Amazon CloudFront&lt;/b&gt;&lt;br&gt;CDN distribution&lt;br&gt;HTTPS, caching, compression&lt;br&gt;Origin Access Control → S3&lt;/font&gt;" vertex="1">
+          <mxGeometry height="105" width="220" x="450" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="O3BHsCiM6bdb2CC6_rJy-1" source="s3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeWidth=2;strokeColor=#249B59;fontSize=12;fontColor=#1B7F46;fontFamily=Verdana;" target="cloudfront" value="origin access">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="O3BHsCiM6bdb2CC6_rJy-1" source="route53" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeWidth=2;strokeColor=#249B59;fontSize=12;fontColor=#1B7F46;fontFamily=Verdana;" target="cloudfront" value="alias record">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=24;fontStyle=1;fontColor=#172B4D;fontFamily=Verdana;" value="Astro Blog -- AWS Static Hosting and Deployment" vertex="1">
+          <mxGeometry height="40" width="760" x="60" y="35" as="geometry" />
+        </mxCell>
+        <mxCell id="githubBoundary" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F7FA;strokeColor=#B3BAC5;dashed=1;dashPattern=8 8;verticalAlign=top;align=left;spacingTop=12;spacingLeft=14;fontSize=16;fontStyle=1;fontColor=#172B4D;fontFamily=Verdana;" value="GitHub" vertex="1">
+          <mxGeometry height="400" width="600" x="60" y="145" as="geometry" />
+        </mxCell>
+        <mxCell id="repo" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#24292F;strokeColor=#24292F;fontColor=#FFFFFF;align=center;verticalAlign=middle;fontSize=15;spacing=8;fontFamily=Verdana;" value="&lt;b&gt;Source repository&lt;/b&gt;&lt;br&gt;Astro site source&lt;br&gt;Git push / pull request" vertex="1">
+          <mxGeometry height="105" width="210" x="95" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="actions" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D6E4FF;strokeColor=#4C6FFF;fontColor=#172B4D;align=center;verticalAlign=middle;fontSize=15;spacing=8;fontFamily=Verdana;" value="&lt;b&gt;GitHub Actions&lt;/b&gt;&lt;br&gt;Checkout → install →&lt;br&gt;astro build → test/lint" vertex="1">
+          <mxGeometry height="105" width="225" x="365" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="oidc" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8DAFF;strokeColor=#8A63D2;fontColor=#172B4D;align=center;verticalAlign=middle;fontSize=14;spacing=8;fontFamily=Verdana;" value="&lt;b&gt;AWS OIDC federation&lt;/b&gt;&lt;br&gt;Short-lived role credentials&lt;br&gt;No long-lived AWS keys" vertex="1">
+          <mxGeometry height="90" width="225" x="365" y="405" as="geometry" />
+        </mxCell>
+        <mxCell id="iam" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8DAFF;strokeColor=#8A63D2;fontColor=#172B4D;align=center;verticalAlign=middle;fontSize=14;spacing=8;fontFamily=Verdana;" value="&lt;b&gt;IAM deploy role&lt;/b&gt;&lt;br&gt;Least-privilege S3 write&lt;br&gt;+ CloudFront invalidation" vertex="1">
+          <mxGeometry height="105" width="220" x="710" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="repo" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeWidth=2;strokeColor=#5E6C84;fontSize=12;fontColor=#5E6C84;fontFamily=Verdana;" target="actions" value="push / PR">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="actions" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeWidth=2;strokeColor=#8A63D2;fontSize=12;fontColor=#6B46C1;fontFamily=Verdana;" target="oidc" value="assume role">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="oidc" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeWidth=2;strokeColor=#8A63D2;fontSize=12;fontColor=#6B46C1;fontFamily=Verdana;" target="iam" value="OIDC trust">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="iam" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeWidth=2;strokeColor=#249B59;fontSize=12;fontColor=#1B7F46;fontFamily=Verdana;" target="s3" value="sync &lt;i&gt;dist/&lt;/i&gt;">
+          <mxGeometry relative="1" x="0.3636" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="iam" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeWidth=2;dashed=1;strokeColor=#249B59;fontSize=12;fontColor=#1B7F46;fontFamily=Verdana;" target="cloudfront" value="invalidate cache">
+          <mxGeometry relative="1" x="-0.0083" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="1010" y="282.5" />
+              <mxPoint x="1010" y="457.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
