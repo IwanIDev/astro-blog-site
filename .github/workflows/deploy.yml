@@ -43,6 +43,8 @@ jobs:
 
       - name: Apply Terraform infrastructure
         working-directory: terraform
+        env:
+          TF_VAR_comments_ip_address: ${{ secrets.COMMENTS_IP_ADDRESS }}
         run: |
           terraform apply \
             -auto-approve \

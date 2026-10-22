@@ -22,6 +22,12 @@ variable "hosted_zone_name" {
   default     = "iwaningman.com."
 }
 
+variable "comments_ip_address" {
+  description = "IPv4 address for the comments hostname."
+  type        = string
+  sensitive   = true
+}
+
 variable "github_repository" {
   description = "GitHub repository allowed to assume the deployment role."
   type        = string

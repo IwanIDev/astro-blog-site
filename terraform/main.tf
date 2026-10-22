@@ -334,3 +334,11 @@ resource "aws_route53_record" "root" {
     evaluate_target_health = false
   }
 }
+
+resource "aws_route53_record" "comments" {
+  zone_id = data.aws_route53_zone.site.zone_id
+  name    = "comments.iwaningman.com"
+  type    = "A"
+  ttl     = 300
+  records = [var.comments_ip_address]
+}
