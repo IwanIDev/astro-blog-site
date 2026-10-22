@@ -25,7 +25,7 @@ data "aws_iam_policy_document" "route53_dnssec_kms" {
 
     principals {
       type        = "Service"
-      identifiers = ["route53.amazonaws.com"]
+      identifiers = ["dnssec-route53.amazonaws.com"]
     }
 
     actions = [
