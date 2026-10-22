@@ -34,18 +34,6 @@ data "aws_iam_policy_document" "route53_dnssec_kms" {
       "kms:Sign",
     ]
     resources = ["*"]
-
-    condition {
-      test     = "StringEquals"
-      variable = "aws:SourceAccount"
-      values   = [data.aws_caller_identity.current.account_id]
-    }
-
-    condition {
-      test     = "ArnEquals"
-      variable = "aws:SourceArn"
-      values   = ["arn:aws:route53:::hostedzone/${data.aws_route53_zone.site.zone_id}"]
-    }
   }
 
   statement {
@@ -71,7 +59,7 @@ data "aws_iam_policy_document" "route53_dnssec_kms" {
 resource "aws_kms_key" "route53_dnssec" {
   provider                 = aws.us_east_1
   description              = "Route 53 DNSSEC signing key for ${var.hosted_zone_name}"
-  customer_master_key_spec = "RSA_2048"
+  customer_master_key_spec = "ECC_NIST_P256"
   key_usage                = "SIGN_VERIFY"
   policy                   = data.aws_iam_policy_document.route53_dnssec_kms.json
 }
