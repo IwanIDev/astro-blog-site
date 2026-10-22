@@ -49,6 +49,32 @@ resource "aws_s3_bucket_versioning" "site" {
   }
 }
 
+resource "aws_s3_bucket_lifecycle_configuration" "site" {
+  bucket = aws_s3_bucket.site.id
+
+  // Lifecycle rules
+  rule {
+    id     = "clean-up-old-site-versions"
+    status = "Enabled"
+
+    filter {}
+
+    expiration {
+      expired_object_delete_marker = true
+    }
+
+    noncurrent_version_expiration {
+      // Expire noncurrent versions after 30 days
+      noncurrent_days = 30
+    }
+
+    abort_incomplete_multipart_upload {
+      // Abort incomplete multipart uploads after 7 days
+      days_after_initiation = 7
+    }
+  }
+}
+
 resource "aws_cloudfront_origin_access_control" "site" {
   name                              = "${var.domain_name}-oac"
   description                       = "CloudFront access to the private Astro site bucket"
